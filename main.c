@@ -18,7 +18,10 @@ void *get_in_addr(struct sockaddr *sa)
 int main(void)
 {
 
-    struct addrinfo hints, *servinfo, *p;
+	int sockfd;
+	struct addrinfo hints, *servinfo, *p;
+	int rv;
+	int numbytes;
 
 	struct sockaddr_storage their_addr;
 	char buf[100];
@@ -34,9 +37,9 @@ int main(void)
     if (r == 0)
     {
         for(p = servinfo; p != NULL; p = p->ai_next){
-            s = socket(p->ai_family, p->ai_socktype,p->ai_protocol);
+            sockfd = socket(p->ai_family, p->ai_socktype,p->ai_protocol);
 
-            if(s > -1){
+            if((sockfd) > -1){
 
                 int b = bind(sockfd, p->ai_addr, p->ai_addrlen);
 
