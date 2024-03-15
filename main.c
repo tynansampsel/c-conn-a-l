@@ -34,17 +34,15 @@ int main(void)
 
 
 
-int waitForMessage(char *requestIp[]){
+int waitForMessage(char *requestIp){
     int sockfd;
 	struct addrinfo hints, *servinfo, *p;
-	int rv;
 	int numbytes;
 
 	struct sockaddr_storage their_addr;
 	char buf[100];
 	socklen_t addr_len;
 	char s[INET6_ADDRSTRLEN];
-    char requestIp2[INET6_ADDRSTRLEN];
 
     memset(&hints, 0, sizeof hints);
     hints.ai_socktype = SOCK_DGRAM;
