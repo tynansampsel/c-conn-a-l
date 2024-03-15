@@ -18,16 +18,16 @@ void *get_in_addr(struct sockaddr *sa)
 int main(void)
 {
 
-    char requestIp[INET6_ADDRSTRLEN]
+    char requestIp[INET6_ADDRSTRLEN];
     waitForMessage(&requestIp);
 
-    printf("listener: got packet from %s\n")
+    printf("listener: got packet from %s\n");
     
     char gotLetter[3];
     printf("DO YOU WANT TO GIVE A COOKIE? :");
     fgets(gotLetter, 3, stdin);
 
-    sendMessage()
+    sendMessage();
 
     // SEND RESPONSE
 
