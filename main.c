@@ -80,9 +80,8 @@ int waitForMessage(char requestIp[]){
         printf("listener: packet contains \"%s\"\n", buf);
 
         int i = inet_ntop(their_addr.ss_family, get_in_addr((struct sockaddr *)&their_addr), requestIp, sizeof requestIp);
-        if(i == NULL){
-            printf("problem printing ip\n");
-
+        if (i == 0) {
+            printf("problem printing ip: %s\n", strerror(errno));
         }
 
 
