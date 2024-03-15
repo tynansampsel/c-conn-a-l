@@ -21,47 +21,13 @@ int main(void)
     char requestIp[INET6_ADDRSTRLEN];
     waitForMessage(&requestIp);
 
-    printf("recieved from %s", requestIp);
+    printf("recieved from %s\n", requestIp);
     
     char gotLetter[3];
     printf("DO YOU WANT TO GIVE A COOKIE? :");
     fgets(gotLetter, 3, stdin);
     char *requestIpPtr = requestIp;
     sendMessage(requestIpPtr, gotLetter);
-
-    // SEND RESPONSE
-
-
-    /*
-        char gotLetter[3];
-    printf("DO YOU WANT TO GIVE A COOKIE? :", buf);
-
-    fgets(gotLetter, 3, stdin);
-
-
-    if (gotLetter[strlen(gotLetter) - 1] == '\n') {
-        gotLetter[strlen(gotLetter) - 1] = '\0';
-    }
-
-    int numbytes2;
-
-    numbytes2 = sendto(sockfd, gotLetter, strlen(gotLetter), 0, p->ai_addr, p->ai_addrlen);
-    if (numbytes2 == -1) {
-        printf("n\n");
-
-        perror("talker: sendto");
-        exit(1);
-    } else {
-        printf("y\n");
-
-    }
-
-    printf("a4\n");
-
-    printf("Sent!\n");
-    freeaddrinfo(servinfo);
-    close(sockfd);
-    */
 
     return 0;
 }
@@ -113,8 +79,11 @@ int waitForMessage(char requestIp[]){
         buf[numbytes] = '\0';
         printf("listener: packet contains \"%s\"\n", buf);
 
-        inet_ntop(their_addr.ss_family, get_in_addr((struct sockaddr *)&their_addr), requestIp, sizeof requestIp);
+        int i = inet_ntop(their_addr.ss_family, get_in_addr((struct sockaddr *)&their_addr), requestIp, sizeof requestIp);
+        if(i == NULL){
+            printf("problem printing ip\n");
 
+        }
 
 
         freeaddrinfo(servinfo);
