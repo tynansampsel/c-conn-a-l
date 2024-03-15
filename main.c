@@ -72,6 +72,10 @@ int main(void)
         fgets(gotLetter, 3, stdin);
 
 
+        if (gotLetter[strlen(gotLetter) - 1] == '\n') {
+            gotLetter[strlen(gotLetter) - 1] = '\0';
+        }
+
         int numbytes2;
 
         numbytes2 = sendto(sockfd, gotLetter, strlen(gotLetter), 0, p->ai_addr, p->ai_addrlen);
