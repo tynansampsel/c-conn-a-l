@@ -17,7 +17,17 @@ void *get_in_addr(struct sockaddr *sa)
 
 int main(void)
 {
-    waitForMessage();
+
+    char requestIp[INET6_ADDRSTRLEN]
+    waitForMessage(&requestIp);
+
+    printf("listener: got packet from %s\n")
+    
+    char gotLetter[3];
+    printf("DO YOU WANT TO GIVE A COOKIE? :");
+    fgets(gotLetter, 3, stdin);
+
+    sendMessage()
 
     // SEND RESPONSE
 
@@ -56,7 +66,9 @@ int main(void)
     return 0;
 }
 
-int waitForMessage(){
+
+
+int waitForMessage(char requestIp[]){
     int sockfd;
 	struct addrinfo hints, *servinfo, *p;
 	int rv;
@@ -101,8 +113,60 @@ int waitForMessage(){
         buf[numbytes] = '\0';
         printf("listener: packet contains \"%s\"\n", buf);
 
+        inet_ntop(their_addr.ss_family, get_in_addr((struct sockaddr *)&their_addr), requestIp, sizeof requestIp);
+
+
+
         freeaddrinfo(servinfo);
         close(sockfd);
     }
     return 0;
+}
+
+int sendMessage(char ip[], char message[]){
+    int sockfd;
+	int numbytes;
+
+    struct addrinfo hints, *servinfo, *p;
+
+    memset(&hints, 0, sizeof hints); // Initialize hints
+    hints.ai_family = AF_INET; // IPv4
+    hints.ai_socktype = SOCK_DGRAM;
+
+    int a = getaddrinfo(ip, "4950", &hints, &servinfo);
+    if(a == 0){
+        printf("got something!!!\n");
+
+        for(p = servinfo; p != NULL; p = p->ai_next){
+            sockfd = socket(p->ai_family, p->ai_socktype,p->ai_protocol);
+            if(sockfd != -1){
+                break;
+                printf("found socket\n");
+            }
+        }
+    } else {
+        printf("womp womp\n");
+    }
+
+
+    if (p == NULL) {
+        fprintf(stderr, "Failed to create socket\n");
+        return 1;
+    }
+
+    numbytes = sendto(sockfd, message, strlen(message), 0, p->ai_addr, p->ai_addrlen);
+    if (numbytes == -1) {
+        printf("n\n");
+
+		perror("talker: sendto");
+		exit(1);
+	} else {
+        printf("y\n");
+
+    }
+
+
+    freeaddrinfo(servinfo);
+    close(sockfd);
+    printf("Sent!\n");
 }
