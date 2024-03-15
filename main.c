@@ -21,13 +21,13 @@ int main(void)
     char requestIp[INET6_ADDRSTRLEN];
     waitForMessage(&requestIp);
 
-    printf("listener: got packet from %s\n");
+    printf("recieved from %s" requestIp);
     
     char gotLetter[3];
     printf("DO YOU WANT TO GIVE A COOKIE? :");
     fgets(gotLetter, 3, stdin);
-
-    sendMessage(requestIp, "HI");
+    char *requestIpPtr = requestIp;
+    sendMessage(requestIpPtr, gotLetter);
 
     // SEND RESPONSE
 
