@@ -88,15 +88,10 @@ int waitForMessage(char *requestIp){
         printf("listener: packet contains \"%s\"\n", buf);
 
         if (inet_ntop(their_addr.ss_family, get_in_addr((struct sockaddr *)&their_addr), pseudoRequestIp, INET6_ADDRSTRLEN) == NULL) {
-            perror("inet_ntop"); // Print an error message if inet_ntop fails
-            // Handle the error appropriately
+            perror("inet_ntop");
+            return 1;
         } else {
-            // If inet_ntop succeeds, assign the result to requestIp
-            requestIp = strdup(pseudoRequestIp);
-            if (requestIp == NULL) {
-                perror("strdup"); // Print an error message if strdup fails
-                // Handle the error appropriately
-            }
+            strcpy(requestIp, pseudoRequestIp);
         }
 
 
