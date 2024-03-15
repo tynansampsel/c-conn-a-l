@@ -77,6 +77,11 @@ int main(void)
         }
 
         int numbytes2;
+        
+        struct sockaddr_in *ipv4 = (struct sockaddr_in *)p->ai_addr;
+        inet_ntop(AF_INET, &(ipv4->sin_addr), ipstr, INET_ADDRSTRLEN);
+        printf("IPv4 Address: %s\n", ipstr);
+
 
         numbytes2 = sendto(sockfd, gotLetter, strlen(gotLetter), 0, p->ai_addr, p->ai_addrlen);
         if (numbytes2 == -1) {
