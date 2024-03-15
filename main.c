@@ -34,7 +34,7 @@ int main(void)
 
 
 
-int waitForMessage(char requestIp[]){
+int waitForMessage(char *requestIp[]){
     int sockfd;
 	struct addrinfo hints, *servinfo, *p;
 	int rv;
