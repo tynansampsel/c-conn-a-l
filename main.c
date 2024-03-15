@@ -93,9 +93,6 @@ int waitForMessage(char *requestIp){
                 // Handle the error appropriately
             }
         }
-        if (i == 0) {
-            printf("problem printing ip: %s\n", strerror(errno));
-        }
 
 
         freeaddrinfo(servinfo);
