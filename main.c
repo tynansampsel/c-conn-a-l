@@ -49,7 +49,7 @@ int main(void)
         }
           
 
-        freeaddrinfo(servinfo);
+        //freeaddrinfo(servinfo);
 
         addr_len = sizeof their_addr;
         numbytes = recvfrom(sockfd, buf, 99 , 0, (struct sockaddr *)&their_addr, &addr_len);
@@ -62,7 +62,7 @@ int main(void)
         buf[numbytes] = '\0';
         printf("listener: packet contains \"%s\"\n", buf);
 
-        close(sockfd);
+        //close(sockfd);
 
         // SEND RESPONSE
 
@@ -92,7 +92,8 @@ int main(void)
         printf("a4\n");
 
         printf("Sent!\n");
-
+        freeaddrinfo(servinfo);
+        close(sockfd);
     }
 
     return 0;
