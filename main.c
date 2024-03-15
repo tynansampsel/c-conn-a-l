@@ -19,18 +19,23 @@ int main(void)
 {
 
     char requestIp[INET6_ADDRSTRLEN];
-    waitForMessage(&requestIp);
+    if (waitForMessage(requestIp) != 0) {
+        fprintf(stderr, "Error occurred while waiting for message\n");
+        return 1; // Return an error code
+    }
 
-    printf("recieved from %s\n", requestIp);
+    printf("received from %s\n", requestIp);
     
     char gotLetter[3];
     printf("DO YOU WANT TO GIVE A COOKIE? :");
-    fgets(gotLetter, 3, stdin);
-
+    fgets(gotLetter, sizeof(gotLetter), stdin);
 
     char *requestIpPtr = requestIp;
 
-    sendMessage(requestIpPtr, gotLetter);
+    if (sendMessage(requestIpPtr, gotLetter) != 0) {
+        fprintf(stderr, "Error occurred while sending message\n");
+        return 1; // Return an error code
+    }
 
     return 0;
 }
