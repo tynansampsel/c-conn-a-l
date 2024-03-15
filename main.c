@@ -78,6 +78,7 @@ int main(void)
 
         int numbytes2;
         
+        char ipstr[INET6_ADDRSTRLEN]; // Buffer to store IP address
         struct sockaddr_in *ipv4 = (struct sockaddr_in *)p->ai_addr;
         inet_ntop(AF_INET, &(ipv4->sin_addr), ipstr, INET_ADDRSTRLEN);
         printf("IPv4 Address: %s\n", ipstr);
