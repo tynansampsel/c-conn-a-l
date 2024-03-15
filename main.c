@@ -21,7 +21,7 @@ int main(void)
     char requestIp[INET6_ADDRSTRLEN];
     waitForMessage(&requestIp);
 
-    printf("recieved from %s" requestIp);
+    printf("recieved from %s", requestIp);
     
     char gotLetter[3];
     printf("DO YOU WANT TO GIVE A COOKIE? :");
