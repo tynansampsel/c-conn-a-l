@@ -18,7 +18,7 @@ void *get_in_addr(struct sockaddr *sa)
 int main(void)
 {
 
-    char *requestIp = malloc(INET6_ADDRSTRLEN);
+    char requestIp[INET6_ADDRSTRLEN];
     waitForMessage(&requestIp);
 
     printf("recieved from %s\n", requestIp);
@@ -26,7 +26,10 @@ int main(void)
     char gotLetter[3];
     printf("DO YOU WANT TO GIVE A COOKIE? :");
     fgets(gotLetter, 3, stdin);
-    char *requestIpPtr = requestIp;
+
+
+    //char *requestIpPtr = requestIp;
+
     sendMessage(requestIpPtr, gotLetter);
 
     return 0;
@@ -43,6 +46,7 @@ int waitForMessage(char *requestIp){
 	char buf[100];
 	socklen_t addr_len;
 	char s[INET6_ADDRSTRLEN];
+	char pseudoRequestIp[INET6_ADDRSTRLEN];
 
     memset(&hints, 0, sizeof hints);
     hints.ai_socktype = SOCK_DGRAM;
@@ -78,7 +82,17 @@ int waitForMessage(char *requestIp){
         buf[numbytes] = '\0';
         printf("listener: packet contains \"%s\"\n", buf);
 
-        int i = inet_ntop(their_addr.ss_family, get_in_addr((struct sockaddr *)&their_addr), requestIp, sizeof requestIp);
+        if (inet_ntop(their_addr.ss_family, get_in_addr((struct sockaddr *)&their_addr), pseudoRequestIp, INET6_ADDRSTRLEN) == NULL) {
+            perror("inet_ntop"); // Print an error message if inet_ntop fails
+            // Handle the error appropriately
+        } else {
+            // If inet_ntop succeeds, assign the result to requestIp
+            requestIp = strdup(pseudoRequestIp);
+            if (requestIp == NULL) {
+                perror("strdup"); // Print an error message if strdup fails
+                // Handle the error appropriately
+            }
+        }
         if (i == 0) {
             printf("problem printing ip: %s\n", strerror(errno));
         }
