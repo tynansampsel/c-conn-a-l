@@ -17,8 +17,47 @@ void *get_in_addr(struct sockaddr *sa)
 
 int main(void)
 {
+    waitForMessage()
 
-	int sockfd;
+    // SEND RESPONSE
+
+
+    /*
+        char gotLetter[3];
+    printf("DO YOU WANT TO GIVE A COOKIE? :", buf);
+
+    fgets(gotLetter, 3, stdin);
+
+
+    if (gotLetter[strlen(gotLetter) - 1] == '\n') {
+        gotLetter[strlen(gotLetter) - 1] = '\0';
+    }
+
+    int numbytes2;
+
+    numbytes2 = sendto(sockfd, gotLetter, strlen(gotLetter), 0, p->ai_addr, p->ai_addrlen);
+    if (numbytes2 == -1) {
+        printf("n\n");
+
+        perror("talker: sendto");
+        exit(1);
+    } else {
+        printf("y\n");
+
+    }
+
+    printf("a4\n");
+
+    printf("Sent!\n");
+    freeaddrinfo(servinfo);
+    close(sockfd);
+    */
+
+    return 0;
+}
+
+int waitForMessage(){
+    int sockfd;
 	struct addrinfo hints, *servinfo, *p;
 	int rv;
 	int numbytes;
@@ -62,45 +101,8 @@ int main(void)
         buf[numbytes] = '\0';
         printf("listener: packet contains \"%s\"\n", buf);
 
-        //close(sockfd);
-
-        // SEND RESPONSE
-
-	    char gotLetter[3];
-        printf("DO YOU WANT TO GIVE A COOKIE? :", buf);
-
-        fgets(gotLetter, 3, stdin);
-
-
-        if (gotLetter[strlen(gotLetter) - 1] == '\n') {
-            gotLetter[strlen(gotLetter) - 1] = '\0';
-        }
-
-        int numbytes2;
-        
-        char ipstr[INET6_ADDRSTRLEN]; // Buffer to store IP address
-        struct sockaddr_in *ipv4 = (struct sockaddr_in *)p->ai_addr;
-        inet_ntop(AF_INET, &(ipv4->sin_addr), ipstr, INET_ADDRSTRLEN);
-        printf("IPv4 Address: %s\n", ipstr);
-
-
-        numbytes2 = sendto(sockfd, gotLetter, strlen(gotLetter), 0, p->ai_addr, p->ai_addrlen);
-        if (numbytes2 == -1) {
-            printf("n\n");
-
-            perror("talker: sendto");
-            exit(1);
-        } else {
-            printf("y\n");
-
-        }
-
-        printf("a4\n");
-
-        printf("Sent!\n");
         freeaddrinfo(servinfo);
         close(sockfd);
     }
-
     return 0;
 }
