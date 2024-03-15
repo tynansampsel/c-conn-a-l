@@ -27,7 +27,7 @@ int main(void)
     printf("DO YOU WANT TO GIVE A COOKIE? :");
     fgets(gotLetter, 3, stdin);
 
-    sendMessage();
+    sendMessage(requestIp, "HI");
 
     // SEND RESPONSE
 
