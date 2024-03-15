@@ -28,7 +28,7 @@ int main(void)
     fgets(gotLetter, 3, stdin);
 
 
-    //char *requestIpPtr = requestIp;
+    char *requestIpPtr = requestIp;
 
     sendMessage(requestIpPtr, gotLetter);
 
