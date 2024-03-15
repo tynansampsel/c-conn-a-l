@@ -63,6 +63,32 @@ int main(void)
         printf("listener: packet contains \"%s\"\n", buf);
 
         close(sockfd);
+
+        // SEND RESPONSE
+
+	    char gotLetter[3];
+        printf("DO YOU WANT TO GIVE A COOKIE? :", buf);
+
+        fgets(gotLetter, 3, stdin);
+
+
+        int numbytes2;
+
+        numbytes2 = sendto(sockfd, gotLetter, strlen(gotLetter), 0, p->ai_addr, p->ai_addrlen);
+        if (numbytes2 == -1) {
+            printf("n\n");
+
+            perror("talker: sendto");
+            exit(1);
+        } else {
+            printf("y\n");
+
+        }
+
+        printf("a4\n");
+
+        printf("Sent!\n");
+
     }
 
     return 0;
