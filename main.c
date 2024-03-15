@@ -18,7 +18,7 @@ void *get_in_addr(struct sockaddr *sa)
 int main(void)
 {
 
-    char requestIp[INET6_ADDRSTRLEN];
+    char *requestIp = malloc(INET6_ADDRSTRLEN);
     waitForMessage(&requestIp);
 
     printf("recieved from %s\n", requestIp);
@@ -80,7 +80,7 @@ int waitForMessage(char requestIp[]){
         buf[numbytes] = '\0';
         printf("listener: packet contains \"%s\"\n", buf);
 
-        int i = inet_ntop(their_addr.ss_family, get_in_addr((struct sockaddr *)&their_addr), requestIp2, sizeof requestIp2);
+        int i = inet_ntop(their_addr.ss_family, get_in_addr((struct sockaddr *)&their_addr), requestIp, sizeof requestIp);
         if (i == 0) {
             printf("problem printing ip: %s\n", strerror(errno));
         }
