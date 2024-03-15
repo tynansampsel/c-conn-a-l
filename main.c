@@ -44,6 +44,7 @@ int waitForMessage(char requestIp[]){
 	char buf[100];
 	socklen_t addr_len;
 	char s[INET6_ADDRSTRLEN];
+    char requestIp2[INET6_ADDRSTRLEN];
 
     memset(&hints, 0, sizeof hints);
     hints.ai_socktype = SOCK_DGRAM;
@@ -79,7 +80,7 @@ int waitForMessage(char requestIp[]){
         buf[numbytes] = '\0';
         printf("listener: packet contains \"%s\"\n", buf);
 
-        int i = inet_ntop(their_addr.ss_family, get_in_addr((struct sockaddr *)&their_addr), requestIp, sizeof(requestIp));
+        int i = inet_ntop(their_addr.ss_family, get_in_addr((struct sockaddr *)&their_addr), requestIp2, sizeof requestIp2);
         if (i == 0) {
             printf("problem printing ip: %s\n", strerror(errno));
         }
