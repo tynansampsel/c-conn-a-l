@@ -66,7 +66,7 @@ int main(void)
 
         // SEND RESPONSE
 
-	    char *gotLetter[3];
+	    char gotLetter[3];
         printf("DO YOU WANT TO GIVE A COOKIE? :", buf);
 
         fgets(gotLetter, 3, stdin);
