@@ -20,20 +20,28 @@ int main(void)
     char requestIp[INET6_ADDRSTRLEN];
     if (waitForMessage(requestIp) != 0) {
         fprintf(stderr, "Error occurred while waiting for message\n");
-        return 1; // Return an error code
+        return 1;
     }
 
-    printf("received from %s\n", requestIp);
+    //printf("received from %s\n", requestIp);
     
-    char gotLetter[3];
+    char answerInput[4];
     printf("do you want to give them a cookie? (Y/N):");
-    fgets(gotLetter, sizeof(gotLetter), stdin);
+    fgets(answerInput, sizeof(answerInput), stdin);
+    char answer[3];
+    if(answerInput[0] == 'y') {
+        strcpy(answer, "yes");
+    } else if (answerInput[0] == 'n') {
+        strcpy(answer, "no");
+    } else {
+        strcpy(answer, "idk");
+    }
 
     char *requestIpPtr = requestIp;
 
-    if (sendMessage(requestIpPtr, gotLetter) != 0) {
+    if (sendMessage(requestIpPtr, answer) != 0) {
         fprintf(stderr, "Error occurred while sending message\n");
-        return 1; // Return an error code
+        return 1;
     }
 
     return 0;
