@@ -48,7 +48,7 @@ int waitForMessage(char *requestIp){
 	int numbytes;
 
 	struct sockaddr_storage their_addr;
-	//char buf[100];
+	char buf[100];
 	socklen_t addr_len;
 	//char s[INET6_ADDRSTRLEN];
 	char pseudoRequestIp[INET6_ADDRSTRLEN];
