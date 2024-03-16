@@ -91,12 +91,13 @@ int waitForMessage(char *requestIp){
     
     printf("someone asked for a cookie!\n");
 
-    if (inet_ntop(their_addr.ss_family, get_in_addr((struct sockaddr *)&their_addr), pseudoRequestIp, INET6_ADDRSTRLEN) == NULL) {
-        perror("inet_ntop");
+    char *requestIpResult = inet_ntop(their_addr.ss_family, get_in_addr((struct sockaddr *)&their_addr), pseudoRequestIp, INET6_ADDRSTRLEN)
+    if (requestIpResult == NULL) {
+        printf("Could not get senders ip!\n");
         return 1;
-    } else {
-        strcpy(requestIp, pseudoRequestIp);
     }
+
+    strcpy(requestIp, pseudoRequestIp);
 
     freeaddrinfo(servinfo);
     close(sockfd);
