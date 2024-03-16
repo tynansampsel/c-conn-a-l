@@ -42,14 +42,15 @@ int main(void)
 
 
 int waitForMessage(char *requestIp){
-    printf("waiting for someone to ask for a cookie...\n");
-
+    printf("waiting for for someone to ask...\n");
     int sockfd;
 	struct addrinfo hints, *servinfo, *p;
+	int numbytes;
 
 	struct sockaddr_storage their_addr;
-	char buf[100];
+	//char buf[100];
 	socklen_t addr_len;
+	//char s[INET6_ADDRSTRLEN];
 	char pseudoRequestIp[INET6_ADDRSTRLEN];
 
     memset(&hints, 0, sizeof hints);
@@ -61,18 +62,25 @@ int waitForMessage(char *requestIp){
     {
         for(p = servinfo; p != NULL; p = p->ai_next){
             sockfd = socket(p->ai_family, p->ai_socktype,p->ai_protocol);
-
             if((sockfd) > -1){
-
                 int b = bind(sockfd, p->ai_addr, p->ai_addrlen);
-
                 break;
             }
-            printf("nah\n");
         }
-        
-
         addr_len = sizeof their_addr;
+        numbytes = recvfrom(sockfd, buf, 99 , 0, (struct sockaddr *)&their_addr, &addr_len);
+        printf("someone asked!\n");
+
+        /*
+        printf("listener: got packet from %s\n",
+                inet_ntop(their_addr.ss_family,
+                    get_in_addr((struct sockaddr *)&their_addr),
+                    s, sizeof s));
+        printf("listener: packet is %d bytes long\n", numbytes);
+        buf[numbytes] = '\0';
+        printf("listener: packet contains \"%s\"\n", buf);
+        */
+       
 
         if (inet_ntop(their_addr.ss_family, get_in_addr((struct sockaddr *)&their_addr), pseudoRequestIp, INET6_ADDRSTRLEN) == NULL) {
             perror("inet_ntop");
@@ -80,7 +88,6 @@ int waitForMessage(char *requestIp){
         } else {
             strcpy(requestIp, pseudoRequestIp);
         }
-
 
         freeaddrinfo(servinfo);
         close(sockfd);
@@ -90,7 +97,7 @@ int waitForMessage(char *requestIp){
 
 int sendMessage(char ip[], char message[]){
     int sockfd;
-	int sendV;
+	int numbytes;
 
     struct addrinfo hints, *servinfo, *p;
 
@@ -104,7 +111,6 @@ int sendMessage(char ip[], char message[]){
             sockfd = socket(p->ai_family, p->ai_socktype,p->ai_protocol);
             if(sockfd != -1){
                 break;
-                printf("found socket\n");
             }
         }
     }
@@ -114,8 +120,8 @@ int sendMessage(char ip[], char message[]){
         return 1;
     }
 
-    sendV = sendto(sockfd, message, strlen(message), 0, p->ai_addr, p->ai_addrlen);
-    if (sendV == -1) {
+    numbytes = sendto(sockfd, message, strlen(message), 0, p->ai_addr, p->ai_addrlen);
+    if (numbytes == -1) {
 		perror("talker: sendto");
 		exit(1);
 	}
@@ -123,5 +129,4 @@ int sendMessage(char ip[], char message[]){
 
     freeaddrinfo(servinfo);
     close(sockfd);
-
 }
