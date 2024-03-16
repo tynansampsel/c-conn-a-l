@@ -17,7 +17,6 @@ void *get_in_addr(struct sockaddr *sa)
 
 int main(void)
 {
-
     char requestIp[INET6_ADDRSTRLEN];
     if (waitForMessage(requestIp) != 0) {
         fprintf(stderr, "Error occurred while waiting for message\n");
@@ -27,7 +26,7 @@ int main(void)
     printf("received from %s\n", requestIp);
     
     char gotLetter[3];
-    printf("DO YOU WANT TO GIVE A COOKIE? :");
+    printf("do you want to give them a cookie? (Y/N):");
     fgets(gotLetter, sizeof(gotLetter), stdin);
 
     char *requestIpPtr = requestIp;
@@ -43,14 +42,14 @@ int main(void)
 
 
 int waitForMessage(char *requestIp){
+    printf("waiting for someone to ask for a cookie...\n");
+
     int sockfd;
 	struct addrinfo hints, *servinfo, *p;
-	int numbytes;
 
 	struct sockaddr_storage their_addr;
 	char buf[100];
 	socklen_t addr_len;
-	char s[INET6_ADDRSTRLEN];
 	char pseudoRequestIp[INET6_ADDRSTRLEN];
 
     memset(&hints, 0, sizeof hints);
@@ -58,7 +57,6 @@ int waitForMessage(char *requestIp){
     hints.ai_flags = AI_PASSIVE;
 
     int r = getaddrinfo(NULL, "4950", &hints, &servinfo);
-
     if (r == 0)
     {
         for(p = servinfo; p != NULL; p = p->ai_next){
@@ -72,20 +70,9 @@ int waitForMessage(char *requestIp){
             }
             printf("nah\n");
         }
-          
-
-        //freeaddrinfo(servinfo);
+        
 
         addr_len = sizeof their_addr;
-        numbytes = recvfrom(sockfd, buf, 99 , 0, (struct sockaddr *)&their_addr, &addr_len);
-
-        printf("listener: got packet from %s\n",
-                inet_ntop(their_addr.ss_family,
-                    get_in_addr((struct sockaddr *)&their_addr),
-                    s, sizeof s));
-        printf("listener: packet is %d bytes long\n", numbytes);
-        buf[numbytes] = '\0';
-        printf("listener: packet contains \"%s\"\n", buf);
 
         if (inet_ntop(their_addr.ss_family, get_in_addr((struct sockaddr *)&their_addr), pseudoRequestIp, INET6_ADDRSTRLEN) == NULL) {
             perror("inet_ntop");
@@ -103,7 +90,7 @@ int waitForMessage(char *requestIp){
 
 int sendMessage(char ip[], char message[]){
     int sockfd;
-	int numbytes;
+	int sendV;
 
     struct addrinfo hints, *servinfo, *p;
 
@@ -113,8 +100,6 @@ int sendMessage(char ip[], char message[]){
 
     int a = getaddrinfo(ip, "4950", &hints, &servinfo);
     if(a == 0){
-        printf("got something!!!\n");
-
         for(p = servinfo; p != NULL; p = p->ai_next){
             sockfd = socket(p->ai_family, p->ai_socktype,p->ai_protocol);
             if(sockfd != -1){
@@ -122,29 +107,21 @@ int sendMessage(char ip[], char message[]){
                 printf("found socket\n");
             }
         }
-    } else {
-        printf("womp womp\n");
     }
-
 
     if (p == NULL) {
         fprintf(stderr, "Failed to create socket\n");
         return 1;
     }
 
-    numbytes = sendto(sockfd, message, strlen(message), 0, p->ai_addr, p->ai_addrlen);
-    if (numbytes == -1) {
-        printf("n\n");
-
+    sendV = sendto(sockfd, message, strlen(message), 0, p->ai_addr, p->ai_addrlen);
+    if (sendV == -1) {
 		perror("talker: sendto");
 		exit(1);
-	} else {
-        printf("y\n");
-
-    }
+	}
 
 
     freeaddrinfo(servinfo);
     close(sockfd);
-    printf("Sent!\n");
+
 }
